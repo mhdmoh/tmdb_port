@@ -37,6 +37,8 @@ extension BottomBarPage {
 class BottomToolbar: UIView {
     private var currentPage: BottomBarPage
     weak var delegate: BottomToolbarDelegate?
+    
+    
 
     private var selectedBackground: UIView = {
         var view = UIView()
@@ -69,11 +71,10 @@ class BottomToolbar: UIView {
         layer.cornerRadius = 30
         layer.masksToBounds = true
         translatesAutoresizingMaskIntoConstraints = false
-        
+        let d = (name: "asd", age: 24)
+        print(d.1)
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: 60),
-            leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16)
+            heightAnchor.constraint(equalToConstant: 60)
         ])
         
         configureGradientLayer()
