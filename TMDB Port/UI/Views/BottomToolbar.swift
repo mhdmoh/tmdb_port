@@ -71,8 +71,6 @@ class BottomToolbar: UIView {
         layer.cornerRadius = 30
         layer.masksToBounds = true
         translatesAutoresizingMaskIntoConstraints = false
-        let d = (name: "asd", age: 24)
-        print(d.1)
         NSLayoutConstraint.activate([
             heightAnchor.constraint(equalToConstant: 60)
         ])
@@ -181,7 +179,7 @@ class BottomToolbar: UIView {
         
         // Animate the background to the new position
         let index = BottomBarPage.allCases.firstIndex(of: selectedPage) ?? 0
-        let position = CGFloat(index) * (frame.width - 48 ) / 4
+        let position = CGFloat(index) * (frame.width - 56 ) / 4
         UIView.animate(withDuration: 0.3) {
             self.selectedBackground.center.x =  38 + 25 + position
         }
