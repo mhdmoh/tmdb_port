@@ -39,8 +39,8 @@ class GenreView: UIView {
         addSubview(label)
         
         NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding),
-            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding),
+            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2 * padding),
+            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2 * padding),
             label.topAnchor.constraint(equalTo: topAnchor, constant: padding),
             label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -padding),
         ])
