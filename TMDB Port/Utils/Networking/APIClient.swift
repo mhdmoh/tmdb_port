@@ -12,14 +12,21 @@ protocol APIClientProtocol {
         using request: Request,
         body: Request.Body?,
         headers: Request.Headers?
-    ) async -> Result<Request.Response, APIErrorModel>
+    ) async throws -> Request.Response
 }
 
 extension APIClientProtocol {
     func request<Request>(
         using request: Request
-    ) async -> Result<Request.Response, APIErrorModel> where Request : APIRequestProtocol, Request.Body == EmptyBody, Request.Headers == EmptyHeaders {
-        return await self.request(using: request, body: nil , headers: nil)
+    ) async throws -> Request.Response where Request : APIRequestProtocol, Request.Body == EmptyBody, Request.Headers == EmptyHeaders {
+        return try await self.request(using: request, body: nil , headers: nil)
+    }
+    
+    func request<Request>(
+        using request: Request,
+        with headers: Request.Headers? = nil
+    ) async throws -> Request.Response where Request : APIRequestProtocol, Request.Body == EmptyBody, Request.Headers == AuthorizedHeaders {
+        return try await self.request(using: request, body: nil , headers: headers ?? .init())
     }
 }
 
@@ -41,21 +48,28 @@ struct APIClient: APIClientProtocol {
         request.setValue(contentType.rawValue, forHTTPHeaderField: "Content-Type")
     }
     
+    private func setToken(for request: inout URLRequest, token: String) {
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    }
+    
     func request<Request>(
         using request: Request,
         body: Request.Body? = nil,
         headers: Request.Headers? = nil
-    ) async -> Result<Request.Response, APIErrorModel> where Request : APIRequestProtocol {
+    ) async throws -> Request.Response where Request : APIRequestProtocol {
         guard let url = request.createURL() else {
-            return .failure(.init(message: APIError.invalidURL.localizedDescription))
+            throw APIErrorModel(message: APIError.invalidURL.localizedDescription)
         }
         
         var urlRequest = URLRequest(url: url)
         
         if let headers = headers {
             urlRequest.allHTTPHeaderFields = headers.getHeaders()
+            if headers.isAuth {
+                let token = EnvironmentVars.appid
+                setToken(for: &urlRequest, token: token)
+            }
         }
-        
         urlRequest.httpMethod = request.method.rawValue
         MLogger.shared.log("Response Status Code: \(String(describing: urlRequest.url))", level: .info)
 
@@ -68,7 +82,7 @@ struct APIClient: APIClientProtocol {
                     setContentType(for: &urlRequest, contentType: request.contentType)
                     MLogger().log(String(data: urlRequest.httpBody!, encoding: .utf8) ?? "NO Body")
                 case .multipart:
-                    return .failure(.init(message: APIError.invalidContentType.localizedDescription))
+                    throw APIErrorModel(message: APIError.invalidContentType.localizedDescription)
                 }
             }
             
@@ -88,17 +102,17 @@ struct APIClient: APIClientProtocol {
                 }catch{
                     MLogger.shared.log("Couldn't decode error response", level: .error)
                 }
-                return .failure(result ?? .init())
+                throw result ?? APIErrorModel.init()
             }
             MLogger().log(String(data: data, encoding: .utf8) ?? "", level: .debug)
             let result = try await Task.detached {
                 try decoder.decode(Request.Response.self, from: data)
             }.value
             
-            return .success(result)
+            return result
         }catch {
             print(error)
-            return .failure(.init(message: error.localizedDescription))
+            throw APIErrorModel(message: error.localizedDescription)
         }
     }
 }

@@ -6,15 +6,26 @@
 //
 
 import UIKit
+import Swinject
 
 class GenreListViewController: UIViewController {
-    var genres: [Genre] = []
     private var collectionView: UICollectionView!
-
+    private var genreVM: GenresViewModel!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         setupCollectionView()
+        setUpViewModel()
+    }
+    
+    private func setUpViewModel(){
+        genreVM = GenresViewModel(service: Container.sharedContainer.resolve(GenreServiceProtocol.self)!)
+        Task {
+            await genreVM.getGenres()
+            self.collectionView.reloadData()
+        }
     }
 
     private func setupCollectionView() {
@@ -57,17 +68,17 @@ class GenreListViewController: UIViewController {
 
 extension GenreListViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return genres.count
+        return genreVM.genres.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GenreCell", for: indexPath) as! GenreCell
-        cell.configure(with: genres[indexPath.item])
+        cell.configure(with: genreVM.genres[indexPath.item])
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let genre = genres[indexPath.item]
+        let genre = genreVM.genres[indexPath.item]
         let label = UILabel()
         label.text = genre.name
         label.sizeToFit()

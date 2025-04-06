@@ -6,5 +6,5 @@
 //
 
 enum MConstants: String {
-    case baseURL = "https://api.openweathermap.org"
+    case baseURL = "https://api.themoviedb.org/3/"
 }

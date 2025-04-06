@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		5FCED69A2DA30108009A9221 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 5FCED6992DA30108009A9221 /* Swinject */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		5FB11CA12D9F0B1D00975EDB /* TMDB Port.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TMDB Port.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5FCED69A2DA30108009A9221 /* Swinject in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +85,7 @@
 			);
 			name = "TMDB Port";
 			packageProductDependencies = (
+				5FCED6992DA30108009A9221 /* Swinject */,
 			);
 			productName = "TMDB Port";
 			productReference = 5FB11CA12D9F0B1D00975EDB /* TMDB Port.app */;
@@ -111,6 +117,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				5FCED3992DA28E4C009A9221 /* XCRemoteSwiftPackageReference "Sourcery" */,
+				5FCED6982DA30108009A9221 /* XCRemoteSwiftPackageReference "Swinject" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5FB11CA22D9F0B1D00975EDB /* Products */;
@@ -389,7 +396,23 @@
 				minimumVersion = 2.2.6;
 			};
 		};
+		5FCED6982DA30108009A9221 /* XCRemoteSwiftPackageReference "Swinject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Swinject/Swinject";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.9.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5FCED6992DA30108009A9221 /* Swinject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5FCED6982DA30108009A9221 /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = Swinject;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5FB11C992D9F0B1D00975EDB /* Project object */;
 }

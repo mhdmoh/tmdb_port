@@ -6,12 +6,36 @@
 //
 
 import UIKit
+import Swinject
+
+extension Container {
+    static let sharedContainer: Container = {
+        var container = Container()
+        container.register(APIClientProtocol.self) { resolver in
+            return APIClient()
+        }
+        
+        
+        container.register(GenreDSProtocol.self) { resolver in
+            return GenresDS(client: resolver.resolve(APIClientProtocol.self)!, endpoints: GenreEndpoints())
+        }
+        
+        container.register(GenreRepoProtocol.self) { resolver in
+            return GenreRepo(remoteDS: resolver.resolve(GenreDSProtocol.self)!)
+        }
+        
+        container.register(GenreServiceProtocol.self) { resolver in
+            return GenreService(repo: resolver.resolve(GenreRepoProtocol.self)!)
+        }
+        
+        return container
+    }()
+}
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     var coordinator: MainCoordinator?
-
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.

@@ -26,12 +26,6 @@ class HomeViewController: UIViewController {
     
     private func makeGenreListViewController() -> GenreListViewController {
         let genreVC = GenreListViewController()
-        genreVC.genres = [
-            Genre(id: 1, name: "Action"),
-            Genre(id: 2, name: "Drama"),
-            Genre(id: 3, name: "Comedy"),
-            Genre(id: 4, name: "Horror")
-        ]
         return genreVC
     }
 
