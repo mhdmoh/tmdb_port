@@ -23,7 +23,7 @@ class GenreView: UIView {
     }
     
     private func setupLayout(){
-        backgroundColor = UIColor(resource: .gray)
+        backgroundColor = UIColor(resource: .backgroundGray)
         layer.cornerRadius = 12
         layer.masksToBounds = true
         
