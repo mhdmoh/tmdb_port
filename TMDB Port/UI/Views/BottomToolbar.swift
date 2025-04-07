@@ -37,8 +37,6 @@ extension BottomBarPage {
 class BottomToolbar: UIView {
     private var currentPage: BottomBarPage
     weak var delegate: BottomToolbarDelegate?
-    
-    
 
     private var selectedBackground: UIView = {
         var view = UIView()
