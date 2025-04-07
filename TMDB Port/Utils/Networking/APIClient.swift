@@ -104,7 +104,7 @@ struct APIClient: APIClientProtocol {
                 }
                 throw result ?? APIErrorModel.init()
             }
-            MLogger().log(String(data: data, encoding: .utf8) ?? "", level: .debug)
+//            MLogger().log(String(data: data, encoding: .utf8) ?? "", level: .debug)
             let result = try await Task.detached {
                 try decoder.decode(Request.Response.self, from: data)
             }.value

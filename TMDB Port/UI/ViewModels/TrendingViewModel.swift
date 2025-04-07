@@ -14,10 +14,10 @@ class TrendingViewModel: ObservableObject {
     @Published var error: APIErrorModel?
     @Published var isLoading: Bool = false
     
-    enum TrendingType {
-        case movies
-        case shows
-        case people
+    enum TrendingType: String, CaseIterable,  RawRepresentable {
+        case movies = "Movies"
+        case shows  = "TvShows"
+        case people = "People"
     }
     
     init(service: TrendingServiceProtocol) {
