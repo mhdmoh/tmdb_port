@@ -15,7 +15,6 @@ extension Container {
             return APIClient()
         }
         
-        
         container.register(GenreDSProtocol.self) { resolver in
             return GenresDS(client: resolver.resolve(APIClientProtocol.self)!, endpoints: GenreEndpoints())
         }
@@ -26,6 +25,18 @@ extension Container {
         
         container.register(GenreServiceProtocol.self) { resolver in
             return GenreService(repo: resolver.resolve(GenreRepoProtocol.self)!)
+        }
+        
+        container.register(TrendingDSProtocol.self) { resolver in
+            return TrendingDS(client: resolver.resolve(APIClientProtocol.self)!, endpoint: TrendingEndpoints())
+        }
+        
+        container.register(TrendingRepoProtocol.self) { resolver in
+            return TrendingRepo(remoteDS: resolver.resolve(TrendingDSProtocol.self)!)
+        }
+        
+        container.register(TrendingServiceProtocol.self) { resolver in
+            return TrendingService(repo: resolver.resolve(TrendingRepoProtocol.self)!)
         }
         
         return container
