@@ -9,6 +9,8 @@ import UIKit
 
 class HomeViewController: UIViewController {
     public var coordinator: HomeCoordinator?
+    private var genreVC: GenreListViewController!
+    private var trendingVC: TrendingListViewController!
     
     let navBar: MainNavBar = {
         var view = MainNavBar()
@@ -20,16 +22,39 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         setUpNavBar()
 
-        let genreVC = makeGenreListViewController()
-        embedGenreList(genreVC)
+        genreVC = makeGenreListViewController()
+        embedGenreList()
+        
+        trendingVC = makeTrendingListViewController()
+        embedTrendingList()
+        
     }
     
     private func makeGenreListViewController() -> GenreListViewController {
         let genreVC = GenreListViewController()
         return genreVC
     }
+    
+    private func makeTrendingListViewController() -> TrendingListViewController {
+        let trendingVC = TrendingListViewController()
+        return trendingVC
+    }
 
-    private func embedGenreList(_ genreVC: GenreListViewController) {
+    private func embedTrendingList() {
+        addChild(trendingVC)
+        view.addSubview(trendingVC.view)
+        trendingVC.didMove(toParent: self)
+        
+        trendingVC.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            trendingVC.view.topAnchor.constraint(equalTo: genreVC.view.bottomAnchor, constant: 16),
+            trendingVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            trendingVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            trendingVC.view.heightAnchor.constraint(equalToConstant: 200)
+        ])
+    }
+    
+    private func embedGenreList() {
         addChild(genreVC)
         view.addSubview(genreVC.view)
         genreVC.didMove(toParent: self)
