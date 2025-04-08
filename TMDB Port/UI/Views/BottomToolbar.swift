@@ -12,6 +12,7 @@ protocol BottomToolbarDelegate: AnyObject {
     func bottomToolbar(_ toolbar: BottomToolbar, didSelectPage page: BottomBarPage)
 }
 
+
 enum BottomBarPage: CaseIterable {
     case home
     case favorite
