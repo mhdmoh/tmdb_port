@@ -11,9 +11,9 @@ struct TrendingEndpoints: APIEndpointProtocol {
     typealias Endpoint = Endpoints
     
     enum Endpoints: String {
-        case movie = "/trending/movie/day"
-        case tv = "/trending/tv/day"
-        case person = "/trending/person/day"
+        case movie = "trending/movie/day"
+        case tv = "trending/tv/day"
+        case person = "trending/person/day"
     }
     
     func trendingMovies() -> APIRequest<EmptyBody, EmptyQueries, AuthorizedHeaders, PaginationResponse<Media>> {

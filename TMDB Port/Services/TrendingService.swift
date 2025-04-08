@@ -18,7 +18,7 @@ struct TrendingService: TrendingServiceProtocol {
     }
     
     func getTrendingTvShows() async -> Result<PaginationResponse<Media>, APIErrorModel> {
-        return await repo.getTrendingMovies()
+        return await repo.getTrendingTvShows()
     }
     
     func getTrendingPeople() async -> Result<PaginationResponse<Person>, APIErrorModel> {

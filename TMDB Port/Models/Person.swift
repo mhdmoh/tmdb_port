@@ -8,11 +8,12 @@
 
 struct Person: Codable {
     let id: Int
-    let name, originalName, mediaType: String
+    let name: String
+    let originalName, mediaType: String?
     let adult: Bool
     let popularity: Double
     let gender: Int
-    let knownForDepartment, profilePath: String
+    let knownForDepartment, profilePath: String?
 
     enum CodingKeys: String, CodingKey {
         case id, name

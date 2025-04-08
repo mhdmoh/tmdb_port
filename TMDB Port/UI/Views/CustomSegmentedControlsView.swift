@@ -7,9 +7,28 @@
 
 import UIKit
 
+protocol CustomSegmentedControlsDelegate: AnyObject {
+    associatedtype Option: CaseIterable & RawRepresentable & Equatable where Option.RawValue == String
+    func customSegmentedControls(_ segmentedControls: CustomSegmentedControlsView<Option>, didSelectOption option: Option)
+}
+
+final class AnyCustomSegmentedControlsDelegate<Option: CaseIterable & RawRepresentable & Equatable>: CustomSegmentedControlsDelegate where Option.RawValue == String {
+    private let _didSelect: (CustomSegmentedControlsView<Option>, Option) -> Void
+
+    init<Delegate: CustomSegmentedControlsDelegate>(_ delegate: Delegate) where Delegate.Option == Option {
+        _didSelect = delegate.customSegmentedControls
+    }
+
+    func customSegmentedControls(_ segmentedControls: CustomSegmentedControlsView<Option>, didSelectOption option: Option) {
+        _didSelect(segmentedControls, option)
+    }
+}
+
 class CustomSegmentedControlsView<Option>: UIView where Option: CaseIterable, Option: RawRepresentable, Option.RawValue == String, Option: Equatable {
     var label: String
     var selectedOption: Option
+    var delegate: AnyCustomSegmentedControlsDelegate<Option>?
+    
     private var stackView: UIStackView!
     private var buttons = [UIButton]()
     
@@ -147,7 +166,8 @@ class CustomSegmentedControlsView<Option>: UIView where Option: CaseIterable, Op
     
     @objc private func onTapClicked(_ sender: UIButton) {
         let selectedTap = Option.init(rawValue: sender.accessibilityIdentifier!)!
-        //TODO: add delegate
+        delegate?.customSegmentedControls(self, didSelectOption: selectedTap)
+        
         guard let index = Option.allCases.firstIndex(of: selectedTap) else { return }
         let intIndex = Option.allCases.distance(from: Option.allCases.startIndex, to: index)
         
