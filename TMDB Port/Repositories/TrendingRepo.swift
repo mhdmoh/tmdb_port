@@ -21,7 +21,7 @@ struct TrendingRepo: TrendingRepoProtocol, BaseRepository {
     
     func getTrendingTvShows() async -> Result<PaginationResponse<Media>, APIErrorModel> {
         return await sendRequest {
-            return try await remoteDS.getTrendingMovies()
+            return try await remoteDS.getTrendingTvShows()
         }
     }
     

@@ -7,4 +7,5 @@
 
 enum MConstants: String {
     case baseURL = "https://api.themoviedb.org/3/"
+    case posterUrl = "https://image.tmdb.org/t/p/original"
 }

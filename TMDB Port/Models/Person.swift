@@ -14,13 +14,4 @@ struct Person: Codable {
     let popularity: Double
     let gender: Int
     let knownForDepartment, profilePath: String?
-
-    enum CodingKeys: String, CodingKey {
-        case id, name
-        case originalName = "original_name"
-        case mediaType = "media_type"
-        case adult, popularity, gender
-        case knownForDepartment = "known_for_department"
-        case profilePath = "profile_path"
-    }
 }

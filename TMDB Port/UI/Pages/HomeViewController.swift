@@ -47,7 +47,7 @@ class HomeViewController: UIViewController {
         
         trendingVC.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            trendingVC.view.topAnchor.constraint(equalTo: genreVC.view.bottomAnchor, constant: 24),
+            trendingVC.view.topAnchor.constraint(equalTo: genreVC.view.bottomAnchor, constant: 32),
             trendingVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             trendingVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             trendingVC.view.heightAnchor.constraint(equalToConstant: 200)
