@@ -24,6 +24,15 @@ class TrendingViewModel: ObservableObject {
         self.service = service
     }
     
+    func itemCount(from type: TrendingType) -> Int {
+        switch type {
+        case .movies, .shows:
+            return media.count
+        case .people:
+            return people.count
+        }
+    }
+    
     private func handleResult<T>(_ result: Result<PaginationResponse<T>, APIErrorModel>, assignTo keyPath: ReferenceWritableKeyPath<TrendingViewModel, [T]>) {
         switch result {
         case .success(let response):

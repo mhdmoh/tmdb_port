@@ -7,27 +7,15 @@
 
 import UIKit
 
-protocol CustomSegmentedControlsDelegate: AnyObject {
+protocol CustomSegmentedControlsDelegate<Option>: AnyObject {
     associatedtype Option: CaseIterable & RawRepresentable & Equatable where Option.RawValue == String
     func customSegmentedControls(_ segmentedControls: CustomSegmentedControlsView<Option>, didSelectOption option: Option)
-}
-
-final class AnyCustomSegmentedControlsDelegate<Option: CaseIterable & RawRepresentable & Equatable>: CustomSegmentedControlsDelegate where Option.RawValue == String {
-    private let _didSelect: (CustomSegmentedControlsView<Option>, Option) -> Void
-
-    init<Delegate: CustomSegmentedControlsDelegate>(_ delegate: Delegate) where Delegate.Option == Option {
-        _didSelect = delegate.customSegmentedControls
-    }
-
-    func customSegmentedControls(_ segmentedControls: CustomSegmentedControlsView<Option>, didSelectOption option: Option) {
-        _didSelect(segmentedControls, option)
-    }
 }
 
 class CustomSegmentedControlsView<Option>: UIView where Option: CaseIterable, Option: RawRepresentable, Option.RawValue == String, Option: Equatable {
     var label: String
     var selectedOption: Option
-    var delegate: AnyCustomSegmentedControlsDelegate<Option>?
+    var delegate: (any CustomSegmentedControlsDelegate<Option>)?
     
     private var stackView: UIStackView!
     private var buttons = [UIButton]()
@@ -86,6 +74,10 @@ class CustomSegmentedControlsView<Option>: UIView where Option: CaseIterable, Op
             labelView.topAnchor.constraint(equalTo: topAnchor),
             labelView.leadingAnchor.constraint(equalTo: leadingAnchor)
         ])
+        
+        DispatchQueue.main.async{ 
+            self.updateBackgroundLocation(type: self.selectedOption)
+        }
     }
 
     private func calculateMaxOptionWidth() {
@@ -168,7 +160,12 @@ class CustomSegmentedControlsView<Option>: UIView where Option: CaseIterable, Op
         let selectedTap = Option.init(rawValue: sender.accessibilityIdentifier!)!
         delegate?.customSegmentedControls(self, didSelectOption: selectedTap)
         
-        guard let index = Option.allCases.firstIndex(of: selectedTap) else { return }
+        updateBackgroundLocation(type: selectedTap)
+        selectedOption = selectedTap
+    }
+    
+    private func updateBackgroundLocation(type: Option) {
+        guard let index = Option.allCases.firstIndex(of: type) else { return }
         let intIndex = Option.allCases.distance(from: Option.allCases.startIndex, to: index)
         
         let newLabelWidth = Int(stackView.frame.width / CGFloat(Option.allCases.count))
@@ -177,6 +174,5 @@ class CustomSegmentedControlsView<Option>: UIView where Option: CaseIterable, Op
         UIView.animate(withDuration: 0.3) {
             self.selectionBackground.center.x = CGFloat(12 + position + newLabelWidth / 2)
         }
-        selectedOption = selectedTap
     }
 }

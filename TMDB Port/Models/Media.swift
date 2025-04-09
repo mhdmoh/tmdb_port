@@ -9,14 +9,16 @@
 struct Media: Codable {
     let backdropPath: String
     let id: Int
-    let title, originalTitle, overview, posterPath: String
+    let overview: String
+    let originalTitle, title, name: String?
+    let posterPath: String?
     let mediaType: String
     let adult: Bool
     let originalLanguage: String
     let genreIds: [Int]
     let popularity: Double
-    let releaseDate: String
-    let video: Bool
+    let releaseDate, firstAirDate: String?
+    let video: Bool?
     let voteAverage: Double
     let voteCount: Int
 }
