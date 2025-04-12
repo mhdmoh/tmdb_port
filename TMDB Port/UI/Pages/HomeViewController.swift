@@ -44,7 +44,7 @@ class HomeViewController: UIViewController {
         addChild(trendingVC)
         view.addSubview(trendingVC.view)
         trendingVC.didMove(toParent: self)
-        
+        trendingVC.delegate = self
         trendingVC.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             trendingVC.view.topAnchor.constraint(equalTo: genreVC.view.bottomAnchor, constant: 32),
@@ -75,5 +75,19 @@ class HomeViewController: UIViewController {
             navBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             navBar.topAnchor.constraint(equalTo: view.topAnchor),
         ])
+    }
+}
+
+extension HomeViewController: TrendingListViewControllerDelegate {
+    func didSelectMovie(_ movie: Media) {
+        coordinator?.goToDetails(of: movie)
+    }
+    
+    func didSelectTVShow(_ tvShow: Media) {
+        
+    }
+    
+    func didSelectPerson(_ person: Person) {
+    
     }
 }
