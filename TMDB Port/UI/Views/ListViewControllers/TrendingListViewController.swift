@@ -8,10 +8,17 @@
 import UIKit
 import Swinject
 
+protocol TrendingListViewControllerDelegate: AnyObject {
+    func didSelectMovie(_ movie: Media)
+    func didSelectTVShow(_ tvShow: Media)
+    func didSelectPerson(_ person: Person)
+}
+
 class TrendingListViewController: UIViewController {
     private var vm: TrendingViewModel!
     var currentType: TrendingViewModel.TrendingType = .movies
-    
+    weak var delegate: TrendingListViewControllerDelegate?
+
     private let typeControl: CustomSegmentedControlsView = {
         let view = CustomSegmentedControlsView<TrendingViewModel.TrendingType>(label: "Trending", option: .movies)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -83,7 +90,7 @@ extension TrendingListViewController: CustomSegmentedControlsDelegate {
     }
 }
 
-extension TrendingListViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension TrendingListViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return vm.itemCount(from: currentType)
     }
@@ -103,5 +110,19 @@ extension TrendingListViewController: UICollectionViewDataSource, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 96, height: 170)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch currentType {
+        case .movies:
+            let movie = vm.media[indexPath.item]
+            delegate?.didSelectMovie(movie)
+        case .shows:
+            let show = vm.media[indexPath.item]
+            delegate?.didSelectTVShow(show)
+        case .people:
+            let person = vm.people[indexPath.item]
+            delegate?.didSelectPerson(person)
+        }
     }
 }

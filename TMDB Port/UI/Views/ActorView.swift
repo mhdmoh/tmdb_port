@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 
 class ActorView: UIView {
     let actor: Person
@@ -38,7 +37,7 @@ class ActorView: UIView {
         self.actor = actor
         super.init(frame: .zero)
         setupLayout()
-        displayActorImage()
+        actorImage.loadImage(imagePath: actor.profilePath)
     }
     
     required init?(coder: NSCoder) {
@@ -64,24 +63,7 @@ class ActorView: UIView {
             actorName.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
-    
-    // Image Display
-    func displayActorImage() {
-        actorImage.kf.indicatorType = .activity
-        let pngSerializer = FormatIndicatedCacheSerializer.png
-        
-        if let profilePath = actor.profilePath, !profilePath.isEmpty,
-           let url = URL(string: MConstants.posterUrl.rawValue + profilePath) {
-            actorImage.kf.setImage(with: url, options: [.cacheSerializer(pngSerializer)])
-            actorImage.backgroundColor = .clear
-        } else {
-            actorImage.image = UIImage(resource: .no)
-            actorImage.contentMode = .scaleAspectFit
-            actorImage.backgroundColor = .clear
-        }
-    }
 }
-
 class ActorCell: UICollectionViewCell {
     private var actorView: ActorView?
 

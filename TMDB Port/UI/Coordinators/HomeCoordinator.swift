@@ -20,4 +20,11 @@ class HomeCoordinator: Coordinator {
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
+    
+    func goToDetails(of movie: Media) {
+        let vc = MovieDetailsViewController(movie: movie)
+        vc.coordinator = self
+        navigationController.setNavigationBarHidden(true, animated: false)
+        navigationController.pushViewController(vc, animated: false)
+    }
 }

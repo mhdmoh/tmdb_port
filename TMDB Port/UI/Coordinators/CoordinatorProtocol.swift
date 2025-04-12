@@ -17,3 +17,9 @@ protocol Coordinator: AnyObject {
 protocol MainCoordinatorDelegate: AnyObject {
     func switchTab(to page: BottomBarPage)
 }
+
+extension Coordinator {
+    func popView() {
+        navigationController.popViewController(animated: true)
+    }
+}
